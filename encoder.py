@@ -1,6 +1,10 @@
 import argparse
-from MTB import *
-from lsb import *
+from MTB import file_to_binary
+from image_encoder_decoder import image_encode
+from audio_encoder_decoder import audio_encode
+from text_encoder_decoder import text_encode
+from video_encoder_decoder import video_encode
+from metadata_functions import add_message_meta
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-s', '--secret', help='the media to be hidden', type=str)
@@ -39,3 +43,11 @@ if __name__ == '__main__':
             binary_message=secret_file_binary_with_metadata,
             output_path=output_path
         )
+    elif carrier_ext == 'mov':
+        video_encode(
+            video_path=carrier,
+            binary_message=secret_file_binary_with_metadata,
+            output_path=output_path
+        )
+    else:
+        raise Exception("Invalid carrier: Valid extensions - 'txt', 'png', 'wav', 'mov'")

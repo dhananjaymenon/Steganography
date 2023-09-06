@@ -2,8 +2,11 @@ import argparse
 import os.path
 import errno
 
-from MTB import *
-from lsb import *
+from MTB import binary_to_file
+from image_encoder_decoder import image_decode
+from audio_encoder_decoder import audio_decode
+from text_encoder_decoder import text_decode
+from video_encoder_decoder import video_decode
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-e', '--encoded', help='encoded file location', type=str)
@@ -39,6 +42,10 @@ if __name__ == '__main__':
     elif encoded_ext == 'txt':
         binary_decoded, ext = text_decode(
             encoded_text_path=encoded
+        )
+    elif encoded_ext == 'mov':
+        binary_decoded, ext = video_decode(
+            encoded_video_path=encoded
         )
     else:
         raise Exception("extension of encoded file location not supported")
