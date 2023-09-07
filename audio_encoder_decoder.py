@@ -34,7 +34,7 @@ Audio Encode and Decode
 """
 
 
-def audio_encode(audio_path, binary_message, output_path):
+def audio_encode(audio_path: str, binary_message: str, output_path: str):
     input_wav = audio_path
     output_wav = output_path
 
@@ -79,7 +79,7 @@ def audio_encode(audio_path, binary_message, output_path):
     return
 
 
-def audio_decode(encoded_audio_path):
+def audio_decode(encoded_audio_path: str) -> [str, str]:
     input_wav = encoded_audio_path
 
     with wave.open(input_wav, 'rb') as wav_in:

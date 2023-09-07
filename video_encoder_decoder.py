@@ -14,6 +14,10 @@ Helper Functions
 
 
 def get_frame_max(original_video_path):
+    """
+    Returns the maximum length of binary string that can be stored in
+    a frame
+    """
     # Get dimension of video
     vcap = cv2.VideoCapture(original_video_path)
 
@@ -29,7 +33,9 @@ def get_frame_max(original_video_path):
 
 
 def video_to_frames(video_path, output_dir):
-
+    """
+    Converts a video to a directory of frames
+    """
     # Create the output directory
     if os.path.exists(output_dir):
         shutil.rmtree(output_dir)
@@ -69,6 +75,9 @@ def video_to_frames(video_path, output_dir):
 
 
 def frames_to_video(frames_dir, original_video_path, output_video_path):
+    """
+    Converts a directory of frames to a video.
+    """
     output_video_without_sound_path = 'output_video_without_sound.mov'
 
     # Get frame dimensions from the original video
