@@ -36,6 +36,9 @@ def video_to_frames(video_path, output_dir):
     """
     Converts a video to a directory of frames
     """
+    # Display progress
+    print("Converting video to frames...")
+
     # Create the output directory
     if os.path.exists(output_dir):
         shutil.rmtree(output_dir)
@@ -65,9 +68,6 @@ def video_to_frames(video_path, output_dir):
         # Increment frame counter
         frame_count += 1
 
-        # Display progress
-        print(f"Saved frame {frame_count}")
-
     # Release the video capture
     cap.release()
 
@@ -78,6 +78,9 @@ def frames_to_video(frames_dir, original_video_path, output_video_path):
     """
     Converts a directory of frames to a video.
     """
+    # Display progress
+    print("Converting frames to video...")
+
     output_video_without_sound_path = 'output_video_without_sound.mov'
 
     # Get frame dimensions from the original video
@@ -100,8 +103,6 @@ def frames_to_video(frames_dir, original_video_path, output_video_path):
 
         frame = cv2.imread(frame_path)
         out.write(frame)
-
-        print(f"Added frame {frame_count} to the output video")
         frame_count += 1
 
     # Release the output VideoWriter
@@ -133,6 +134,7 @@ def frames_to_video(frames_dir, original_video_path, output_video_path):
 Video Encode and Decode
 """
 
+
 def video_encode(video_path, binary_message, output_path):
 
     # Convert video to a list of frames
@@ -144,7 +146,6 @@ def video_encode(video_path, binary_message, output_path):
 
     # add frame_meta
     binary_message = add_frame_meta(binary_message, frame_max)
-    print(binary_message)
 
     # Number of frames required
     number_of_frames_binary = binary_message[:32]
@@ -155,17 +156,31 @@ def video_encode(video_path, binary_message, output_path):
     images = [os.path.join(frame_dir, filename) for filename in os.listdir(frame_dir)]
 
     # add message to images
-    binary_segments = [binary_message[i:i+frame_max] for i in range(number_of_frames)]
-    print(binary_segments)
+    binary_segments = [binary_message[i * frame_max: (i + 1) * frame_max] for i in range(number_of_frames)]
+
+    # Check if secret media will fit in video
+    if len(binary_segments) > len(images):
+        raise ValueError('Message is too large to be encoded in the video')
+
+    print(f"Encoding {len(binary_segments)} of {len(images)} frames")
 
     image_index = 0
+    print("Encoding binary message in frames...")
     for binary_segment in binary_segments:
         image = images[image_index]
         image_encode(image, binary_segment, image)
-        print(image, image_index, binary_segment)
+        # print(binary_segment[:10], binary_segment[-10:])
+        image_index += 1
 
     # Convert directory of images to a video
     frames_to_video(frame_dir, video_path, output_path)
+
+    # Remove temporary frame directory
+    shutil.rmtree(frame_dir)
+
+    print(f"message encoded to video successfully and saved at {output_path}")
+
+    return
 
 
 def video_decode(encoded_video_path):
@@ -183,24 +198,24 @@ def video_decode(encoded_video_path):
     binary_sequence_first_frame = "".join([bin(i)[-1] for i in img])
     number_of_frames_binary = binary_sequence_first_frame[:32]
     number_of_frames = int(number_of_frames_binary, 2)
-    print(number_of_frames_binary, number_of_frames)
+    # print(number_of_frames_binary, number_of_frames)
 
     # Get binary sequence
     message_binary = ""
     print(number_of_frames)
+    print(f"Decoding {number_of_frames} frames...")
     for i in range(number_of_frames):
         encoded_image_path = images[i]
-        print(encoded_image_path)
         img = np.asarray(Image.open(encoded_image_path))
         img = img.flatten()
+        binary_segment = "".join([bin(i)[-1] for i in img])
+        # print(binary_segment[:10], binary_segment[-10:])
+        message_binary += binary_segment
 
-        message_binary += "".join([bin(i)[-1] for i in img])
-        print(i)
+    # Remove temporary frame directory
+    shutil.rmtree(frame_dir)
 
-    print(message_binary[:32])
     # Use meta data
     message_binary, ext = use_message_meta(message_binary[32:])
-    print(message_binary)
-    print(ext)
 
     return message_binary, ext
