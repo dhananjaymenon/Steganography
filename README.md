@@ -3,6 +3,18 @@ Steganography is a technique that involves concealing secret information or data
 
 The above code conceals any file within various carrier file types [text, audio, image, video]
 
+## Installation
+```
+git clone https://github.com/dhananjaymenon/Steganography.git
+```
+
+## Useage
+```
+python encoder.py --secret <file-name> --carrier <file-name> --output <file-name>
+
+python decoder.py --encoded <encoded-file-name> --decoded <directory-name>
+```
+
 ## General technique
 ### Converting the secret file to a binary string and vice-versa
 The secret file is converted to its corresponding Base64 format, which is then converted to binary. This binary string is used for encoding
@@ -29,14 +41,19 @@ The output is:
 - The decoded secret file
 
 
-
-
 ## Text
+Space Width type steganography is used. Only ```.txt``` files can be the text carrier.
 
 ## Audio
+Least Significant Bit in each frame is used to encode message. Only ```.wav``` files can be the audio carrier.
 
 ## Image
+Least Significant Bit in each channel in each pixel is used to encode message. Only ```.png``` files can be the image carrier.
 
 ## Video
+Least Significant Bit encoding is done on each frame (Image Encoding on each frame). only ```.mov``` files can be the video carrier.
 
-## Conclusion
+## Note
+Secret media must have extension length == 3. Extensions of length 4 are not allowed.
+
+
