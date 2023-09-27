@@ -1,9 +1,9 @@
 import argparse
 from MTB import file_to_binary
-from image_encoder_decoder import image_encode
-from audio_encoder_decoder import audio_encode
-from text_encoder_decoder import text_encode
-from video_encoder_decoder import video_encode
+from encoders_and_decoders.image_encoder_decoder import image_encode
+from encoders_and_decoders.audio_encoder_decoder import audio_encode
+from encoders_and_decoders.text_encoder_decoder import text_encode
+from encoders_and_decoders.video_encoder_decoder import video_encode
 from metadata_functions import add_message_meta
 
 parser = argparse.ArgumentParser()
@@ -50,4 +50,4 @@ if __name__ == '__main__':
             output_path=output_path
         )
     else:
-        raise Exception("Invalid carrier: Valid extensions - 'txt', 'png', 'wav', 'mov'")
+        raise Exception(f"Invalid carrier {carrier_ext}: Valid extensions - 'txt', 'png', 'wav', 'mov'")

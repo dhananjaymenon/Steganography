@@ -3,10 +3,10 @@ import os.path
 import errno
 
 from MTB import binary_to_file
-from image_encoder_decoder import image_decode
-from audio_encoder_decoder import audio_decode
-from text_encoder_decoder import text_decode
-from video_encoder_decoder import video_decode
+from encoders_and_decoders.image_encoder_decoder import image_decode
+from encoders_and_decoders.audio_encoder_decoder import audio_decode
+from encoders_and_decoders.text_encoder_decoder import text_decode
+from encoders_and_decoders.video_encoder_decoder import video_decode
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-e', '--encoded', help='encoded file location', type=str)
@@ -52,4 +52,4 @@ if __name__ == '__main__':
 
     file_name = os.path.basename(encoded[:-4])
     binary_to_file(binary_string=binary_decoded, output_file=f"{output_path}/{file_name}_decoded", ext=ext)
-    print(f"message decoded and saved at {output_path}/{encoded_ext}_decoded.{ext}")
+    print(f"message decoded and saved at {output_path}/{file_name}_decoded.{ext}")
