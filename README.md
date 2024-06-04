@@ -8,7 +8,7 @@ The above code conceals any file within various carrier file types [text, audio,
 git clone https://github.com/dhananjaymenon/Steganography.git
 ```
 
-## Useage
+## Usage
 ```
 python encoder.py --secret <file-name> --carrier <file-name> --output <file-name>
 
